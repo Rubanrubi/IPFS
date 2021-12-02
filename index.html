@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IPFS</title>
+</head>
+<body>
+<form method="post">
+    <label style="color: brown;">Upload Image to IPFS</label><br><br>
+    <input type="file" accept='image/*'  name="file-name" onchange="sendImage(event)"><br><br>
+    <img id='output' style="height:100px; width:100px;">
+</form>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+       function sendImage(fileEvent) { 
+        var input = fileEvent.target;
+
+        var reader = new FileReader();
+        reader.onload = function(){
+        var dataURL = reader.result;
+        var output = document.getElementById('output');
+        output.src = dataURL;
+        };
+        console.log(reader.readAsDataURL(input.files[0]));
+
+        const file = reader.readAsDataURL(input.files[0]);
+
+        axios.get("http://localhost:3000/upload-file?image="+file).then(
+        (response) => {
+            var result = response.data;
+            console.log(result);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+
+    // axios.get('http://localhost:3000/upload-file',{'image':file});
+    
+   } 
+    </script>
+
+
+</body>
+</html>
